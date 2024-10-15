@@ -1,0 +1,10 @@
+{
+    "out": "docs", // Diretório de saída para os arquivos gerados
+    "exclude": ["**/*.spec.ts"], // Excluir arquivos de teste
+    "includeVersion": true, // Incluir versão do projeto na documentação
+    "excludePrivate": true, // Excluir membros privados da documentação
+    "excludeProtected": true, // Excluir membros protegidos da documentação
+    "hideGenerator": true, // Ocultar informações sobre o gerador
+    "plugin": ["typedoc-plugin-markdown"] // Gera documentação em Markdown (opcional)
+}
+  
