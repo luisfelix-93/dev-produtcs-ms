@@ -10,17 +10,18 @@ export class ClientService {
         @Inject(CACHE_MANAGER) private cacheManager: Cache,
     ){}
 
-    async getClientById(client_id : string) {
+    async getClientById(client_id : string):Promise<Client> {
 
-        const token = await this.cacheManager.get<string>(`token:${client_id}`);
+        const token = await this.cacheManager.get(`token:${client_id}`);
 
         if(!token) {
-            throw new Error('Token not found!')
+            console.log('token not found!')
+            return null
         }
 
         const config = {
             method: 'GET',
-            url: `http://localhost:5050/client/${client_id}`,
+            url: `http://192.168.100.5:5050/client/${client_id}`,
             headers: { Authorization: `Bearer ${token}`},
             timeOut: 10000
         };
@@ -29,9 +30,10 @@ export class ClientService {
 
             const client = new Client();
             const response = await axios.request(config);
-
-            client.cliet_name = response.data.clientName;
+            client.client_name = response.data.clientName;
             client.zipCode = response.data.zipCode;
+            console.log(client)
+            return client;
 
         } catch(error){
             console.log(error);

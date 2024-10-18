@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 import { Client } from "src/client/schema/client.schema";
 
 export type ProductDocument = Product & Document;

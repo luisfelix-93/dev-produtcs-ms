@@ -6,31 +6,39 @@ import { Cache } from "cache-manager";
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
     constructor(
-        private jwtService : JwtService,
+        private jwtService: JwtService,
         @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) {}
-    
-    async canActivate(context: ExecutionContext):Promise<boolean> {
+
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const authHeader = request.headers['authorization'];
 
-        if(!authHeader) {
+        // Verificar se o header de autorização está presente
+        if (!authHeader) {
             return false;
         }
 
+        // Extrair o token do cabeçalho Authorization
         const token = authHeader.split(' ')[1];
 
-        try{
+        try {
+            // Verificar o token usando o JwtService
             const decodedToken = this.jwtService.verify(token);
-            const userId = decodedToken.sub;
+            const clientId = decodedToken.clientId;
 
-            await this.cacheManager.set(`token:${userId}`, token, 3600);
+            // Armazenar o token no cache, com TTL de 1 hora (3600 segundos)
+            await this.cacheManager.set(`token:${clientId}`, token, 3600 * 1000);
+            console.log(`Token stored in cache for userId: ${clientId}: ${token}`);
+
+            // Se o token for válido, retornar true (permissão concedida)
             return true;
 
+        } catch (error) {
+            console.log('Error trying to authorize the requisition', error);
 
-        } catch(error) {
-            console.log('Error trying to authorizate the requisition', error)
+            // Retornar false em caso de erro
+            return false;
         }
     }
-
 }

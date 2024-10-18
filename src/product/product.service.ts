@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateProduct } from './DTO/createProduct.dto';
 
 import { ClientService } from 'src/client/client.service';
+import { UpdateProductDTO } from './DTO/updateProduct.dto';
 
 @Injectable()
 export class ProductService {
@@ -13,6 +14,9 @@ export class ProductService {
         private readonly clientService: ClientService
     ){}
 
+    async findProduct() : Promise<Product[]> {
+        return await this.productModel.find().exec();
+    }
     async findProductByID(idProduct : string) : Promise<Product|null> {
         return await this.productModel.findById(idProduct).exec();
     }
@@ -20,10 +24,12 @@ export class ProductService {
     async register(productDTO: CreateProduct): Promise<Product> {
         
         const client_id = productDTO.client_id;
-        const client = this.clientService.getClientById(client_id);
-
+        const client = await this.clientService.getClientById(client_id);
+        if(!client) {
+            return null;
+        }
         const dateCreated =  Date.now();
-
+        console.log(client);
         const newProduct = new this.productModel({
             title: productDTO.title,
             price: productDTO.price,
@@ -35,5 +41,23 @@ export class ProductService {
         return await newProduct.save();
 
     }
+
+    async findProductListByIdClient(client_id: string):Promise<Product[]>{
+        const client = await this.clientService.getClientById(client_id);
+        if(!client) {
+            return null;
+        }
+
+        return await this.productModel.find({seller: client}).exec();
+    }
+    async updateProduct(productId: string, productDTO: UpdateProductDTO): Promise<Product|null> {
+        return await this.productModel.findByIdAndUpdate(productId, productDTO, {new: true}).exec();
+    }
+
+    async deleteProduct(productId: string): Promise<Product|null> {
+        return await this.productModel.findByIdAndDelete(productId);
+    }
+
+    
 
 }

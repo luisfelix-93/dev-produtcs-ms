@@ -32,7 +32,7 @@ COPY --from=builder /usr/src/app/dist ./dist
 COPY .env .env
 
 # Expose the port the service will run on
-EXPOSE 5050
+EXPOSE 3000
 
 # Command to run application
 CMD ["node", "dist/main"]
