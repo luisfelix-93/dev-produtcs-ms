@@ -3,6 +3,8 @@ import { Client } from './schema/client.schema';
 import axios from 'axios';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Injectable()
 export class ClientService {
@@ -21,7 +23,7 @@ export class ClientService {
 
         const config = {
             method: 'GET',
-            url: `http://192.168.100.5:5050/client/${client_id}`,
+            url: `${process.env.CLIENT_URL}/${client_id}`,
             headers: { Authorization: `Bearer ${token}`},
             timeOut: 10000
         };
