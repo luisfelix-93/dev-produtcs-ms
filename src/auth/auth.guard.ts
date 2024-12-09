@@ -25,11 +25,13 @@ export class JwtAuthGuard implements CanActivate {
         try {
             // Verificar o token usando o JwtService
             const decodedToken = this.jwtService.verify(token);
-            const clientId = decodedToken.clientId;
+            const sessionId = decodedToken.sessionId;
 
             // Armazenar o token no cache, com TTL de 1 hora (3600 segundos)
-            await this.cacheManager.set(`token:${clientId}`, token, 3600 * 1000);
-            console.log(`Token stored in cache for userId: ${clientId}: ${token}`);
+            await this.cacheManager.set(`token:${sessionId}`, token, 3600 * 1000);
+            console.log(`Token stored in cache for userId: ${sessionId}: ${token}`);
+
+            request.sessionId = sessionId;
 
             // Se o token for válido, retornar true (permissão concedida)
             return true;

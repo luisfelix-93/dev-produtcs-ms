@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { CreateProduct } from './DTO/createProduct.dto';
@@ -21,14 +21,16 @@ export class ProductController {
 
     @Get(':client_id')
     @UseGuards(JwtAuthGuard)
-    async getProductListByClient(@Param('client_id') client_id: string) {
-        return await this.getProductListByClient(client_id);
+    async getProductListByClient(@Param('client_id') client_id: string, @Req() request: any) {
+        const sessionId = request.sessionId;
+        return await this.getProductListByClient(client_id, sessionId);
     }
 
     @Post()
     @UseGuards(JwtAuthGuard)
-    async registerProduct(@Body() createProductDTO : CreateProduct){
-        return await this.productService.register(createProductDTO);
+    async registerProduct(@Body() createProductDTO : CreateProduct, @Req() request: any){
+        const sessionId = request.sessionId;
+        return await this.productService.register(createProductDTO, sessionId);
     }
 
     @Delete(':id')

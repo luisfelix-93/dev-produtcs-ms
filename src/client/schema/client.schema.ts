@@ -6,5 +6,7 @@ export class Client{
     @Prop()
     client_name: string;
     @Prop()
+    clientType: string;
+    @Prop()
     zipCode: string;
 }

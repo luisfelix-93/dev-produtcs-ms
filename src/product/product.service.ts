@@ -21,13 +21,16 @@ export class ProductService {
         return await this.productModel.findById(idProduct).exec();
     }
 
-    async register(productDTO: CreateProduct): Promise<Product> {
+    async register(productDTO: CreateProduct, sessionId: string): Promise<Product> {
         
         const client_id = productDTO.client_id;
-        const client = await this.clientService.getClientById(client_id);
+        const client = await this.clientService.getClientById(client_id, sessionId);
         if(!client) {
             return null;
         }
+        if(client.clientType !== 'buyer') {
+            return null;
+        } 
         const dateCreated =  Date.now();
         console.log(client);
         const newProduct = new this.productModel({
@@ -35,15 +38,15 @@ export class ProductService {
             price: productDTO.price,
             thumbnailHd: productDTO.thumbnail,
             date: dateCreated,
-            seller: client
+            seller: client 
         })
 
         return await newProduct.save();
 
     }
 
-    async findProductListByIdClient(client_id: string):Promise<Product[]>{
-        const client = await this.clientService.getClientById(client_id);
+    async findProductListByIdClient(client_id: string, sessionId: string):Promise<Product[]>{
+        const client = await this.clientService.getClientById(client_id, sessionId);
         if(!client) {
             return null;
         }

@@ -12,9 +12,9 @@ export class ClientService {
         @Inject(CACHE_MANAGER) private cacheManager: Cache,
     ){}
 
-    async getClientById(client_id : string):Promise<Client> {
+    async getClientById(client_id : string, sessionId:string):Promise<Client> {
 
-        const token = await this.cacheManager.get(`token:${client_id}`);
+        const token = await this.cacheManager.get(`token:${sessionId}`);
 
         if(!token) {
             console.log('token not found!')
@@ -34,6 +34,7 @@ export class ClientService {
             const response = await axios.request(config);
             client.client_name = response.data.clientName;
             client.zipCode = response.data.zipCode;
+            client.clientType = response.data.clientType;
             console.log(client)
             return client;
 
