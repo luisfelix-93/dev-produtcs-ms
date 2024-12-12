@@ -27,7 +27,7 @@ export class ClientService {
             headers: { Authorization: `Bearer ${token}`},
             timeOut: 10000
         };
-
+        console.log(config.url);
         try {
 
             const client = new Client();

@@ -3,7 +3,7 @@ import { ProductService } from './product.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { CreateProduct } from './DTO/createProduct.dto';
 
-@Controller('product')
+@Controller()
 export class ProductController {
     constructor(private readonly productService: ProductService) {}
 
@@ -19,11 +19,11 @@ export class ProductController {
         return await this.productService.findProductByID(productId);
     }
 
-    @Get(':client_id')
+    @Get('productByClient/:client_id')
     @UseGuards(JwtAuthGuard)
     async getProductListByClient(@Param('client_id') client_id: string, @Req() request: any) {
         const sessionId = request.sessionId;
-        return await this.getProductListByClient(client_id, sessionId);
+        return await this.productService.findProductListByIdClient(client_id, sessionId);
     }
 
     @Post()
