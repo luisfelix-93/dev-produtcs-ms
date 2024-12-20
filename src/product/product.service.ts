@@ -28,7 +28,7 @@ export class ProductService {
         if(!client) {
             return null;
         }
-        if(client.clientType !== 'buyer') {
+        if(client.clientType !== 'store') {
             return null;
         } 
         const dateCreated =  Date.now();

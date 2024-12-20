@@ -23,3 +23,4 @@ async function bootstrap() {
   console.log('Microservice RabbitMQ conectado!');
 }
 bootstrap();
+ 
