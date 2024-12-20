@@ -32,7 +32,14 @@ export class ProductController {
     @UseGuards(JwtAuthGuard)
     async registerProduct(@Body() createProductDTO : CreateProduct, @Req() request: any){
         const sessionId = request.sessionId;
-        return await this.productService.register(createProductDTO, sessionId);
+        const product = await this.productService.register(createProductDTO, sessionId);
+        if(!product) {
+            return {
+                message: "Cliente não autorizado para registrar produto",
+                statusCode: 400
+            }
+        }
+        return product;
     }
 
     @Delete(':id')
