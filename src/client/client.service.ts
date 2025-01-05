@@ -33,6 +33,7 @@ export class ClientService {
             const client = new Client();
             const response = await axios.request(config);
             client.client_name = response.data.clientName;
+            client.email = response.data.email;
             client.zipCode = response.data.zipCode;
             client.clientType = response.data.clientType;
             console.log(client)

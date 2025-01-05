@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from './schema/product.schema';
 import { ClientModule } from 'src/client/client.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { WebhookModule } from 'src/webhook/webhook.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         },
       },
     ]),
+    WebhookModule
   ],
   providers: [ProductService],
   controllers: [ProductController]

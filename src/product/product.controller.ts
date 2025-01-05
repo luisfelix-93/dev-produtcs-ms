@@ -3,11 +3,15 @@ import { ProductService } from './product.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { CreateProduct } from './DTO/createProduct.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { WebhookService } from 'src/webhook/webhook.service';
 
 
 @Controller('products')
 export class ProductController {
-    constructor(private readonly productService: ProductService) {}
+    constructor(
+        private readonly productService: ProductService,
+        private readonly webhookService: WebhookService
+    ) {}
 
     @Get()
     @UseGuards(JwtAuthGuard)
@@ -39,6 +43,7 @@ export class ProductController {
                 statusCode: 400
             }
         }
+        await this.webhookService.sendProductNotification(product.seller.email, product.title);
         return product;
     }
 
