@@ -12,7 +12,13 @@ export class WebhookService {
         this.rabbitMQHost = process.env.RABBITMQ_HOST || 'amqp://localhost:5672';
         this.rabbitMQQueue = 'product';
     }
-
+    /**
+     * Receives the name of the newly created product and the seller's email 
+     * and sends it to the notification webhook asynchronously
+     * @param email 
+     * @param productName 
+     * @return Promise<void>
+     */
     async sendProductNotification(email: string, productName: string): Promise<void> {
         try {
             const connection = await amqplib.connect(this.rabbitMQHost);
