@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/auth.guard';
+import { WebhookModule } from './webhook/webhook.module';
 
 
 
@@ -21,7 +22,8 @@ import { JwtAuthGuard } from './auth/auth.guard';
     }),
     MongooseModule.forRoot(process.env.MONGODB_URI),
     ClientModule,
-    AuthModule
+    AuthModule,
+    WebhookModule
   ],
   providers: [
     {
